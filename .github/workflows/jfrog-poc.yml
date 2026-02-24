@@ -34,8 +34,8 @@ jobs:
         working-directory: simple-java-maven-app-master
         run: |
           jfrog mvn-config \
-            --repo-resolve-releases=maven \
-            --repo-resolve-snapshots=maven \
+            --repo-resolve-releases=maven-virtual \
+            --repo-resolve-snapshots=maven-virtual \
             --repo-deploy-releases=maven-local \
             --repo-deploy-snapshots=maven-local
 
