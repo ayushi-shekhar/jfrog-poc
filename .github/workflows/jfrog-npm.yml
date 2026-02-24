@@ -25,7 +25,6 @@ jobs:
       - name: Configure npm registry
         run: |
           npm config set registry https://trialzi92ft.jfrog.io/artifactory/api/npm/npm-virtual/
-          npm config set always-auth true
           npm config set //trialzi92ft.jfrog.io/artifactory/api/npm/npm-virtual/:_authToken=${NPM_TOKEN}
         env:
           NPM_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
