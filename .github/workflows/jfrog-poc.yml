@@ -11,41 +11,43 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Java 21 (required by project)
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 21
 
+      # Setup JFrog CLI
       - name: Setup JFrog CLI
         uses: jfrog/setup-jfrog-cli@v4
         env:
           JF_URL: ${{ secrets.JF_URL }}
           JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
 
-      - name: Configure JFrog Server
+      # Configure JFrog server
+      - name: Configure JFrog
         run: |
           jfrog config add my-server \
             --url=${{ secrets.JF_URL }} \
             --access-token=${{ secrets.JF_ACCESS_TOKEN }} \
             --interactive=false
 
-      - name: Configure Maven for JFrog
+      # Build using standard Maven (stable)
+      - name: Build Project
         working-directory: simple-java-maven-app-master
-        run: |
-          jfrog mvn-config \
-            --repo-resolve-releases=maven-virtual \
-            --repo-resolve-snapshots=maven-virtual \
-            --repo-deploy-releases=maven-local \
-            --repo-deploy-snapshots=maven-local
+        run: mvn clean package
 
-      - name: Build with JFrog
-        working-directory: simple-java-maven-app-master
+      # Upload artifact manually to JFrog
+      - name: Upload Artifact
         run: |
-          jfrog mvn clean install \
-            --build-name=jfrog-poc \
-            --build-number=${{ github.run_number }}
+          jfrog rt upload \
+            "simple-java-maven-app-master/target/*.jar" \
+            "maven-local/"
 
+      # Publish Build Info
       - name: Publish Build Info
         run: |
+          jfrog build-collect-env jfrog-poc ${{ github.run_number }}
+          jfrog build-add-git jfrog-poc ${{ github.run_number }}
           jfrog build-publish jfrog-poc ${{ github.run_number }}
