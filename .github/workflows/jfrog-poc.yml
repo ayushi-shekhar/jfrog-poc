@@ -19,9 +19,11 @@ jobs:
 
       - name: Configure Maven
         run: |
-          jfrog rt mvn-config \
+          jfrog mvnc \
             --repo-resolve-releases=maven-virtual \
-            --repo-deploy-releases=maven-virtual
+            --repo-resolve-snapshots=maven-virtual \
+            --repo-deploy-releases=maven-virtual \
+            --repo-deploy-snapshots=maven-virtual
 
       - name: Build
         working-directory: simple-java-maven-app-master
