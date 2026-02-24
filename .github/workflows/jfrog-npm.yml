@@ -7,6 +7,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: simple-node-js-react-npm-app-master
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -16,15 +20,17 @@ jobs:
         with:
           node-version: '18'
           cache: 'npm'
+          cache-dependency-path: simple-node-js-react-npm-app-master/package-lock.json
 
-      - name: Configure npm auth
+      - name: Configure npm registry
         run: |
-          echo "//<your-domain>/artifactory/api/npm/npm-virtual/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
+          npm config set registry https://trialzi92ft.jfrog.io/artifactory/api/npm/npm-virtual/
+          npm config set always-auth true
+          npm config set //trialzi92ft.jfrog.io/artifactory/api/npm/npm-virtual/:_authToken=${NPM_TOKEN}
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
 
       - name: Install Dependencies
-        working-directory: simple-node-js-react-npm-app-master
         run: npm install
 
       - name: Run Tests
