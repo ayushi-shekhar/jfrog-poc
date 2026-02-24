@@ -15,7 +15,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
            distribution: temurin
-          java-version: 17
+           java-version: 17
 
       - name: Setup JFrog CLI
         uses: jfrog/setup-jfrog-cli@v4
