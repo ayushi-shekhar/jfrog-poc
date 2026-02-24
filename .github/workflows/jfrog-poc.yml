@@ -1,4 +1,4 @@
-name: JFrog Maven POC
+name: Test Plain Maven
 
 on:
   push:
@@ -14,27 +14,14 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-           distribution: temurin
-           java-version: 17
+          distribution: temurin
+          java-version: 17
 
-      - name: Setup JFrog CLI
-        uses: jfrog/setup-jfrog-cli@v4
-        env:
-          JF_URL: ${{ secrets.JF_URL }}
-          JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+      - name: Setup Maven
+        uses: s4u/setup-maven-action@v1
+        with:
+          maven-version: '3.9.6'
 
-      - name: Configure Maven
-        run: |
-          jfrog mvnc \
-            --repo-resolve-releases=maven-virtual \
-            --repo-resolve-snapshots=maven-virtual \
-            --repo-deploy-releases=maven-local \
-            --repo-deploy-snapshots=maven-local
-
-      - name: Build
+      - name: Build (No JFrog)
         working-directory: simple-java-maven-app-master
-        run: jfrog rt mvn clean install
-
-      - name: Deploy
-        working-directory: simple-java-maven-app-master
-        run: jfrog rt mvn deploy
+        run: mvn clean install
