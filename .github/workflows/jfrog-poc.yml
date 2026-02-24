@@ -22,8 +22,8 @@ jobs:
           jfrog mvnc \
             --repo-resolve-releases=maven-virtual \
             --repo-resolve-snapshots=maven-virtual \
-            --repo-deploy-releases=maven-virtual \
-            --repo-deploy-snapshots=maven-virtual
+            --repo-deploy-releases=maven-local \
+            --repo-deploy-snapshots=maven-local
 
       - name: Build
         working-directory: simple-java-maven-app-master
