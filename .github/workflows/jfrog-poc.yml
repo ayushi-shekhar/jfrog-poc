@@ -15,11 +15,11 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
+          java-version: 21
 
-      - name: Verify Maven Version
-        run: mvn -version
+      - name: Verify Java
+        run: java -version
 
-      - name: Build (No JFrog)
+      - name: Build
         working-directory: simple-java-maven-app-master
         run: mvn clean install
