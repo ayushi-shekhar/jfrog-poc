@@ -11,37 +11,34 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # -----------------------
-      # Setup Java 21
-      # -----------------------
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 21
 
-      # -----------------------
-      # Setup JFrog CLI
-      # -----------------------
       - name: Setup JFrog CLI
         uses: jfrog/setup-jfrog-cli@v4
         env:
           JF_URL: ${{ secrets.JF_URL }}
           JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
 
-      # -----------------------
-      # Configure JFrog Server
-      # -----------------------
-      - name: Configure JFrog
+      - name: Configure JFrog Server
         run: |
           jfrog config add my-server \
             --url=${{ secrets.JF_URL }} \
             --access-token=${{ secrets.JF_ACCESS_TOKEN }} \
             --interactive=false
 
-      # -----------------------
-      # Build with JFrog
-      # -----------------------
+      - name: Configure Maven for JFrog
+        working-directory: simple-java-maven-app-master
+        run: |
+          jfrog mvn-config \
+            --repo-resolve-releases=maven \
+            --repo-resolve-snapshots=maven \
+            --repo-deploy-releases=maven-local \
+            --repo-deploy-snapshots=maven-local
+
       - name: Build with JFrog
         working-directory: simple-java-maven-app-master
         run: |
@@ -49,9 +46,6 @@ jobs:
             --build-name=jfrog-poc \
             --build-number=${{ github.run_number }}
 
-      # -----------------------
-      # Publish Build Info
-      # -----------------------
       - name: Publish Build Info
         run: |
           jfrog build-publish jfrog-poc ${{ github.run_number }}
