@@ -48,6 +48,6 @@ jobs:
       # Publish Build Info
       - name: Publish Build Info
         run: |
-          jfrog build-collect-env jfrog-poc ${{ github.run_number }}
-          jfrog build-add-git jfrog-poc ${{ github.run_number }}
-          jfrog build-publish jfrog-poc ${{ github.run_number }}
+          jf rt build-collect-env jfrog-poc ${{ github.run_number }}
+          jf rt build-add-git jfrog-poc ${{ github.run_number }}
+          jf rt build-publish jfrog-poc ${{ github.run_number }}
