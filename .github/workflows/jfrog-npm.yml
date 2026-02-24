@@ -15,30 +15,39 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # ✅ Use Node 20 (required by Vite 7 / Vitest 4)
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'npm'
           cache-dependency-path: simple-node-js-react-npm-app-master/package-lock.json
 
-      - name: Configure npm registry
+      # ✅ Configure JFrog npm registry
+      - name: Configure npm to use JFrog
         run: |
-          npm config set registry https://trialzi92ft.jfrog.io/artifactory/api/npm/npm-virtual/
-          npm config set //trialzi92ft.jfrog.io/artifactory/api/npm/npm-virtual/:_authToken=${NPM_TOKEN}
+          echo "registry=https://trialzi92ft.jfrog.io/artifactory/api/npm/npm-virtual/" >> ~/.npmrc
+          echo "always-auth=true" >> ~/.npmrc
+          echo "//trialzi92ft.jfrog.io/artifactory/api/npm/npm-virtual/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
         env:
           NPM_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
 
+      # Optional debug (remove later)
+      - name: Verify npm registry
+        run: npm config get registry
+
+      # ✅ Install dependencies (will proxy via npm-remote)
       - name: Install Dependencies
         run: npm install
 
+      # ✅ Run tests
       - name: Run Tests
         run: npm test
 
+      # ✅ Build project
       - name: Build
         run: npm run build
 
+      # ✅ Publish package to npm-local (via virtual repo)
       - name: Publish Package
         run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
