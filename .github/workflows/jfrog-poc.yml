@@ -1,4 +1,4 @@
-name: Test Plain Maven
+name: JFrog Maven POC
 
 on:
   push:
@@ -11,15 +11,47 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # -----------------------
+      # Setup Java 21
+      # -----------------------
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 21
 
-      - name: Verify Java
-        run: java -version
+      # -----------------------
+      # Setup JFrog CLI
+      # -----------------------
+      - name: Setup JFrog CLI
+        uses: jfrog/setup-jfrog-cli@v4
+        env:
+          JF_URL: ${{ secrets.JF_URL }}
+          JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
 
-      - name: Build
+      # -----------------------
+      # Configure JFrog Server
+      # -----------------------
+      - name: Configure JFrog
+        run: |
+          jfrog config add my-server \
+            --url=${{ secrets.JF_URL }} \
+            --access-token=${{ secrets.JF_ACCESS_TOKEN }} \
+            --interactive=false
+
+      # -----------------------
+      # Build with JFrog
+      # -----------------------
+      - name: Build with JFrog
         working-directory: simple-java-maven-app-master
-        run: mvn clean install
+        run: |
+          jfrog mvn clean install \
+            --build-name=jfrog-poc \
+            --build-number=${{ github.run_number }}
+
+      # -----------------------
+      # Publish Build Info
+      # -----------------------
+      - name: Publish Build Info
+        run: |
+          jfrog build-publish jfrog-poc ${{ github.run_number }}
