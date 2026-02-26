@@ -23,6 +23,9 @@ jobs:
         run: |
           conan profile detect --force
 
+      - name: Check Conan version
+        run: conan --version
+
       - name: Add JFrog remote
         run: |
           conan remote add jfrog https://trialzi92ft.jfrog.io/artifactory/api/conan/conan-virtual --force
