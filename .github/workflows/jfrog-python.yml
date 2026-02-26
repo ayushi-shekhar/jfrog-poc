@@ -34,9 +34,7 @@ jobs:
         run: python -m build --no-isolation
 
       - name: Publish to JFrog
-        run: |
-          twine upload \
-            --repository-url https://trialzi92ft.jfrog.io/artifactory/api/pypi/python-local \
-            -u __token__ \
-            -p ${{ secrets.JF_ACCESS_TOKEN }} \
-            dist/*
+        run: twine upload --repository-url https://trialzi92ft.jfrog.io/artifactory/api/pypi/python-local dist/*
+        env:
+          TWINE_USERNAME: ${{ secrets.JF_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.JF_ACCESS_TOKEN }}
