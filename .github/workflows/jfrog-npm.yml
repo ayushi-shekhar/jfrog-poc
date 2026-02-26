@@ -45,4 +45,4 @@ jobs:
 
 
       - name: Publish Package
-        run: npm publish --registry=https://trialzi92ft.jfrog.io/artifactory/api/npm/npm-virtual/
+        run: npm publish --registry=https://trialzi92ft.jfrog.io/artifactory/api/npm/npm-local/
