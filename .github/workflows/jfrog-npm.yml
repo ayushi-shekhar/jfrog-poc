@@ -27,7 +27,7 @@ jobs:
         run: |
           echo "registry=https://trialzi92ft.jfrog.io/artifactory/api/npm/npm-virtual/" > .npmrc
           echo "always-auth=true" >> .npmrc
-          echo "//trialzi92ft.jfrog.io/artifactory/api/npm/npm-virtual/:_authToken=${NPM_TOKEN}" >> .npmrc
+          echo "//trialzi92ft.jfrog.io/artifactory/api/npm/npm-virtual/:_authToken=${JF_ACCESS_TOKEN}" >> .npmrc
         env:
           NPM_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
 
