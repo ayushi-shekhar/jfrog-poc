@@ -10,6 +10,7 @@ class MyApp(ConanFile):
     generators = "CMakeDeps", "CMakeToolchain"
 
     requires = "fmt/10.1.1"
+    exports_sources = "*"
 
     def layout(self):
         cmake_layout(self)
