@@ -1,5 +1,7 @@
 from conan import ConanFile
 from conan.tools.cmake import CMake, cmake_layout
+from conan.tools.files import copy
+import os
 
 class MyApp(ConanFile):
     name = "myapp"
@@ -10,6 +12,7 @@ class MyApp(ConanFile):
     generators = "CMakeDeps", "CMakeToolchain"
 
     requires = "fmt/10.1.1"
+
     exports_sources = "*"
 
     def layout(self):
@@ -21,7 +24,12 @@ class MyApp(ConanFile):
         cmake.build()
 
     def package(self):
-        self.copy("myapp*", dst="bin", src="build")
+        copy(
+            self,
+            pattern="myapp*",
+            dst=os.path.join(self.package_folder, "bin"),
+            src=os.path.join(self.build_folder)
+        )
 
     def package_info(self):
         self.cpp_info.bindirs = ["bin"]
