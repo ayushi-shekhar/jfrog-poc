@@ -21,18 +21,17 @@ jobs:
       - name: Upgrade pip & install tools
         run: |
           python -m pip install --upgrade pip
-          pip install build twine
+          pip install build twine setuptools wheel
+        env:
+          PIP_EXTRA_INDEX_URL: https://${{ secrets.JF_ACCESS_TOKEN }}@trialzi92ft.jfrog.io/artifactory/api/pypi/python-virtual/simple
 
-      # 🔥 Use EXTRA index instead of replacing main index
       - name: Install Project
         run: pip install .
         env:
           PIP_EXTRA_INDEX_URL: https://${{ secrets.JF_ACCESS_TOKEN }}@trialzi92ft.jfrog.io/artifactory/api/pypi/python-virtual/simple
 
-      - name: Build Package (disable isolation)
+      - name: Build Package
         run: python -m build --no-isolation
-        env:
-          PIP_EXTRA_INDEX_URL: https://${{ secrets.JF_ACCESS_TOKEN }}@trialzi92ft.jfrog.io/artifactory/api/pypi/python-virtual/simple
 
       - name: Publish to JFrog
         run: |
