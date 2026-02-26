@@ -25,7 +25,7 @@ jobs:
 
       - name: Configure npm for JFrog
         run: |
-          echo "registry=https://trialzi92ft.jfrog.io/artifactory/api/npm/npm-virtual/" > .npmrc
+          echo "registry=https://trialzi92ft.jfrog.io/artifactory/api/npm/npm-local/" > .npmrc
           echo "always-auth=true" >> .npmrc
           echo "//trialzi92ft.jfrog.io/artifactory/api/npm/npm-virtual/:_authToken=${JF_ACCESS_TOKEN}" >> .npmrc
         env:
