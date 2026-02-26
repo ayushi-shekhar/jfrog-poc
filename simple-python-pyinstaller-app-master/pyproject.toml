@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "my-python-app"
+version = "0.1.0"
+description = "Test Python package for JFrog evaluation"
+authors = [
+  { name="ayushi_shekhar", email="ayushi.shekhar@clearroute.io" }
+]
+dependencies = [
+  "requests"
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
