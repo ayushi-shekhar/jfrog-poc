@@ -33,17 +33,16 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          conan install . --output-folder=build --build=missing
+          conan install . --build=missing -s build_type=Release
 
       - name: Configure CMake
         run: |
-          cmake -S . -B build \
-            -DCMAKE_TOOLCHAIN_FILE=build/conan_toolchain.cmake \
+          cmake -S . -B build/Release \
+            -DCMAKE_TOOLCHAIN_FILE=build/Release/conan_toolchain.cmake \
             -DCMAKE_BUILD_TYPE=Release
 
       - name: Build
-        run: |
-          cmake --build build
+        run: cmake --build build/Release
 
       - name: Create Conan Package
         run: |
