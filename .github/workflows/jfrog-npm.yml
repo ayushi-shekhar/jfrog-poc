@@ -15,6 +15,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Node 20 required by Vite 7+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -22,15 +23,16 @@ jobs:
           cache: 'npm'
           cache-dependency-path: simple-node-js-react-npm-app-master/package-lock.json
 
-
+      # 🔐 Configure npm registry (install + publish)
       - name: Configure npm for JFrog
         run: |
-          echo "registry=https://trialzi92ft.jfrog.io/artifactory/api/npm/npm-local/" > .npmrc
+          echo "registry=https://trialzi92ft.jfrog.io/artifactory/api/npm/npm-virtual/" > .npmrc
           echo "always-auth=true" >> .npmrc
-          echo "//trialzi92ft.jfrog.io/artifactory/api/npm/npm-local/:_authToken=${JF_ACCESS_TOKEN}" >> .npmrc
+          echo "//trialzi92ft.jfrog.io/artifactory/api/npm/npm-virtual/:_authToken=${TOKEN}" >> .npmrc
         env:
-          JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
+          TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
 
+      # Debug (can remove later)
       - name: Verify registry
         run: npm config get registry
 
@@ -43,6 +45,6 @@ jobs:
       - name: Build
         run: npm run build
 
-
+      # Publish (virtual must have default deploy repo set)
       - name: Publish Package
-        run: npm publish --registry=https://trialzi92ft.jfrog.io/artifactory/api/npm/npm-local/
+        run: npm publish
