@@ -9,7 +9,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: simple-python-pyindex
+        working-directory: simple-python-pyinstaller-app-master
 
     steps:
       - uses: actions/checkout@v4
