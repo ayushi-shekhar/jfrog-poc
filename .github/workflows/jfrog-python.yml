@@ -14,8 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
@@ -24,15 +23,16 @@ jobs:
           python -m pip install --upgrade pip
           pip install build twine
 
-      - name: Install Dependencies via JFrog
+      # 🔥 Use EXTRA index instead of replacing main index
+      - name: Install Project
         run: pip install .
         env:
-          PIP_INDEX_URL: https://${{ secrets.JF_ACCESS_TOKEN }}@trialzi92ft.jfrog.io/artifactory/api/pypi/python-virtual/simple
+          PIP_EXTRA_INDEX_URL: https://${{ secrets.JF_ACCESS_TOKEN }}@trialzi92ft.jfrog.io/artifactory/api/pypi/python-virtual/simple
 
-      - name: Build Package
-        run: python -m build
+      - name: Build Package (disable isolation)
+        run: python -m build --no-isolation
         env:
-          PIP_INDEX_URL: https://${{ secrets.JF_ACCESS_TOKEN }}@trialzi92ft.jfrog.io/artifactory/api/pypi/python-virtual/simple
+          PIP_EXTRA_INDEX_URL: https://${{ secrets.JF_ACCESS_TOKEN }}@trialzi92ft.jfrog.io/artifactory/api/pypi/python-virtual/simple
 
       - name: Publish to JFrog
         run: |
