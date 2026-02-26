@@ -29,7 +29,7 @@ jobs:
       - name: Add JFrog remote
         run: |
           conan remote add jfrog https://trialzi92ft.jfrog.io/artifactory/api/conan/conan-virtual --force
-          conan remote login jfrog -u ${{ secrets.JF_USERNAME }} -p ${{ secrets.JF_ACCESS_TOKEN }}
+          conan remote login jfrog ${{ secrets.JF_USERNAME }} -p ${{ secrets.JF_ACCESS_TOKEN }}
 
       - name: Install Dependencies
         run: |
