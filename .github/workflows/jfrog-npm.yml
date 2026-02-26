@@ -45,6 +45,6 @@ jobs:
       - name: Build
         run: npm run build
 
-      # Publish (virtual must have default deploy repo set)
-      - name: Publish Package
-        run: npm publish
+      # Publish (virtual must have default deploy repo set) have commented this to test caching
+    #   - name: Publish Package
+    #     run: npm publish
